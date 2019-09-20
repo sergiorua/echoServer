@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ template "echoserver.fullname" . }}"
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ template "echoserver.name" . }}
+    chart: {{ template "echoserver.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "echoserver.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "echoserver.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Values.global.name }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        command: ["/app/echoserver"]
+        ports:
+          - containerPort: {{ .Values.image.containerPort }}
+    {{- if .Values.extraEnv }}
+        env:
+    {{ toYaml .Values.extraEnv | indent 6 -}}
+    {{- end -}}

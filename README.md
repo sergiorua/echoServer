@@ -1,2 +1,2 @@
-# echoServer
+# echoserver
 Simple http echo service

@@ -1,0 +1,6 @@
+The echoserver has been deployed. 
+{{ if .Values.global.name }}
+You can see the pod is running or not with below command
+command:
+  kubectl get pod echoserver
+{{- end -}}
