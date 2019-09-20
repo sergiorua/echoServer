@@ -17,7 +17,7 @@ func homeLink(w http.ResponseWriter, r *http.Request) {
 func getAllEvents(w http.ResponseWriter, r *http.Request) {
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		fmt.Println("Error decoding")
+		fmt.Fprintf(w, `{"result":"","error":%q}`, err)
 		return
 	}
 	dynamic := make(map[string]interface{})
@@ -25,10 +25,13 @@ func getAllEvents(w http.ResponseWriter, r *http.Request) {
 
 	retData, err := json.Marshal(dynamic)
 	if err != nil {
-		fmt.Println("Error decoding")
+		fmt.Fprintf(w, `{"result":"","error":%q}`, err)
 		return
 	}
+	w.Header().Set("Content-type", "application/json")
 	fmt.Fprintf(w, string(retData))
+
+	log.Println(string(retData))
 }
 
 func main() {
